@@ -51,6 +51,13 @@ Use cryptographically secure random generation (secrets module)
 Add a GUI or web interface
 Store common passwords externally for scalability
 
+Some changes made after domain leads reviewed the project:-
+**CSV change**:
+I moved common passwords to a CSV file so the dataset can be updated independently of the code. I load it once at runtime and use a set for efficient lookup.
+**Exception case**:
+A 16-character password consisting entirely of special characters has high entropy despite lacking letters or digits, so I explicitly classify it as strong.
+**secrets module**:
+I used the secrets module instead of random because it provides cryptographically secure randomness, which is recommended for password generation.
 **Disclaimer:**
 This project is for educational purposes only and should not be used as a replacement for professional password management tools.
 
