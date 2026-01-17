@@ -1,6 +1,17 @@
-import random 
+import secrets 
 import string
-common_passwords = ["12345678","password","qwerty","asdfghjkl","letmein","admin123","zxcvbnm","qazwsxedc","1q2w3e4r"]
+import csv
+def load_common_passwords(filename="common_passwords.csv"):
+    common_pwds=set()
+    with open(filename, newline ="", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        for i in reader:
+            if i:
+                common_pwds.add(i[0].strip().lower())
+    return common_pwds
+
+common_passwords = load_common_passwords()
+
 def common_password(password):
     if password.lower() in common_passwords:
         return True
@@ -18,7 +29,8 @@ def password_score ( password ):
         score+=10
     else:
         score +=5
-        
+    if passlen >= 16 and all(c in string.punctuation for c in password):
+        return 10    
     for x in password:
         if x.islower():
             lower_count += 1
@@ -68,11 +80,9 @@ def generate_secure_password(length=16):
 
     new_password = ""
     for i in range(length):
-        new_password += random.choice(chars)
+        new_password += secrets.choice(chars)
 
     return new_password
-
-
 
 
 
@@ -86,11 +96,11 @@ def main():
         print(f"Your password bears this score: {final_score}")
         if final_score>=0 and final_score<=2:
             print("VERY WEAK PASSWORD !!!!")
-        elif final_score>=3 and final_score<=4:
+        elif final_score>2 and final_score<=4:
             print("WEAK PASSWORD !!!!")
-        elif final_score>=5 and final_score<=7:
+        elif final_score>4 and final_score<=7:
             print("MEDIUM PASSWORD !!!!")    
-        elif final_score>=7 and final_score<=9:
+        elif final_score>7 and final_score<=9:
             print("STRONG PASSWORD !!!!")
         elif final_score==10:
             print("VERY STRONG PASSWORD !!!!")
